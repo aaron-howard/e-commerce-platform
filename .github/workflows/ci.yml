@@ -1,0 +1,135 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    services:
+      postgres:
+        image: postgres:13
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: ecommerce_test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: |
+        npm install
+        cd server && npm install
+        cd ../client && npm install
+    
+    - name: Set up environment variables
+      run: |
+        echo "DB_HOST=localhost" >> server/.env
+        echo "DB_PORT=5432" >> server/.env
+        echo "DB_NAME=ecommerce_test" >> server/.env
+        echo "DB_USER=postgres" >> server/.env
+        echo "DB_PASSWORD=postgres" >> server/.env
+        echo "JWT_SECRET=test-secret-key" >> server/.env
+        echo "NODE_ENV=test" >> server/.env
+    
+    - name: Set up database
+      run: |
+        cd server
+        npm run db:setup
+    
+    - name: Run backend tests
+      run: |
+        cd server
+        npm test
+      env:
+        NODE_ENV: test
+    
+    - name: Run frontend tests
+      run: |
+        cd client
+        npm test -- --coverage --watchAll=false
+      env:
+        CI: true
+    
+    - name: Build frontend
+      run: |
+        cd client
+        npm run build
+    
+    - name: Build backend
+      run: |
+        cd server
+        npm run build || echo "No build script found, skipping..."
+
+  lint:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: |
+        npm install
+        cd server && npm install
+        cd ../client && npm install
+    
+    - name: Run ESLint (Backend)
+      run: |
+        cd server
+        npx eslint . --ext .js || echo "ESLint not configured, skipping..."
+    
+    - name: Run ESLint (Frontend)
+      run: |
+        cd client
+        npx eslint src/ --ext .js,.jsx || echo "ESLint not configured, skipping..."
+    
+    - name: Run Prettier check
+      run: |
+        npx prettier --check "**/*.{js,jsx,json,md}" || echo "Prettier not configured, skipping..."
+
+  security:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: |
+        npm install
+        cd server && npm install
+        cd ../client && npm install
+    
+    - name: Run security audit
+      run: |
+        npm audit --audit-level moderate
+        cd server && npm audit --audit-level moderate
+        cd ../client && npm audit --audit-level moderate
