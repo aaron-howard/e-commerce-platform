@@ -5,7 +5,7 @@ Welcome to the live demo of our full-stack e-commerce platform! This is a comple
 ## 🚀 Live Demo
 
 **🌐 Frontend:** [https://your-app-name.vercel.app](https://your-app-name.vercel.app)  
-**🔧 Backend API:** [https://your-backend-name.railway.app](https://your-backend-name.railway.app)  
+**🔧 Backend API:** [https://your-backend-name.vercel.app](https://your-backend-name.vercel.app)  
 **📋 Demo Info:** [https://your-app-name.vercel.app/demo-info.html](https://your-app-name.vercel.app/demo-info.html)
 
 ## 🎯 What You Can Do
@@ -65,7 +65,7 @@ The demo uses Stripe test mode for safe payment testing:
 
 ### DevOps
 - **Vercel** - Frontend hosting
-- **Railway** - Backend hosting
+- **Vercel** - Backend hosting
 - **Docker** - Containerization
 - **GitHub Actions** - CI/CD pipeline
 

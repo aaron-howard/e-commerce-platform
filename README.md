@@ -282,14 +282,24 @@ npm test
 
 ## 🚀 Deployment
 
-### Backend Deployment
-1. Set up a PostgreSQL database (e.g., AWS RDS, Heroku Postgres)
-2. Set environment variables in production
-3. Deploy to a platform like Heroku, AWS, or DigitalOcean
+### Easy Deployment with Vercel + Neon
 
-### Frontend Deployment
-1. Build the production bundle
-2. Deploy to platforms like Vercel, Netlify, or AWS S3
+This project is optimized for easy deployment using Vercel (hosting) and Neon (database). See the detailed deployment guide:
+
+📖 **[VERCEL_NEON_DEPLOYMENT.md](./VERCEL_NEON_DEPLOYMENT.md)** - Complete step-by-step deployment guide
+
+### Quick Deploy Steps
+
+1. **Database**: Set up PostgreSQL with [Neon](https://neon.tech) (free tier available)
+2. **Backend**: Deploy to [Vercel](https://vercel.com) with root directory `server`
+3. **Frontend**: Deploy to [Vercel](https://vercel.com) with root directory `client`
+4. **Environment Variables**: Configure as per the deployment guide
+
+### Alternative Deployment Options
+
+- **Backend**: Heroku, AWS, DigitalOcean
+- **Database**: AWS RDS, Heroku Postgres, Supabase
+- **Frontend**: Netlify, AWS S3, GitHub Pages
 
 ## 🤝 Contributing
 

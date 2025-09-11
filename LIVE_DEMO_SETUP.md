@@ -4,7 +4,7 @@ This guide will help you deploy your e-commerce platform to create a live demo t
 
 ## 🚀 Quick Demo Options
 
-### Option 1: Vercel + Railway (Recommended)
+### Option 1: Vercel + Neon (Recommended)
 
 This is the fastest way to get a live demo running.
 
@@ -17,53 +17,41 @@ This is the fastest way to get a live demo running.
    - Set **Root Directory** to `client`
    - Add environment variables:
      ```
-     REACT_APP_API_URL=https://your-backend-url.railway.app/api
+     REACT_APP_API_URL=https://your-backend-url.vercel.app/api
      REACT_APP_STRIPE_PUBLISHABLE_KEY=pk_test_your_stripe_key
      ```
    - Click "Deploy"
 
-#### Backend (Railway)
+#### Backend (Vercel)
 1. **Deploy Backend**
-   - Go to [railway.app](https://railway.app)
+   - Go to [vercel.com](https://vercel.com)
    - Sign up/login with GitHub
-   - Click "New Project" → "Deploy from GitHub repo"
-   - Select your repository
+   - Click "New Project"
+   - Import your repository
    - Set **Root Directory** to `server`
-   - Add PostgreSQL database:
-     - Click "+" → "Database" → "PostgreSQL"
    - Add environment variables:
      ```
      NODE_ENV=production
-     DB_HOST=${{Postgres.PGHOST}}
-     DB_PORT=${{Postgres.PGPORT}}
-     DB_NAME=${{Postgres.PGDATABASE}}
-     DB_USER=${{Postgres.PGUSER}}
-     DB_PASSWORD=${{Postgres.PGPASSWORD}}
+     DATABASE_URL=your-neon-connection-string
      JWT_SECRET=your-production-jwt-secret
      STRIPE_SECRET_KEY=sk_test_your_stripe_secret_key
      STRIPE_PUBLISHABLE_KEY=pk_test_your_stripe_publishable_key
-     PORT=5000
+     CLIENT_URL=https://your-frontend-url.vercel.app
      ```
    - Click "Deploy"
 
-2. **Set up Database**
-   - Go to your Railway project
-   - Click on the PostgreSQL service
-   - Go to "Connect" tab
-   - Copy the connection details
-   - Run the database setup:
-     ```bash
-     # Connect to Railway database and run setup
-     cd server
-     npm run db:setup
-     ```
+2. **Set up Database (Neon)**
+   - Go to [neon.tech](https://neon.tech)
+   - Create a new project
+   - Copy the connection string
+   - Use Neon SQL editor to run the SQL from `server/scripts/setup-db.js`
 
 3. **Update Frontend URL**
-   - Go back to Vercel
-   - Update the `REACT_APP_API_URL` to your Railway backend URL
+   - Go back to Vercel frontend project
+   - Update the `REACT_APP_API_URL` to your Vercel backend URL
    - Redeploy
 
-### Option 2: Netlify + Railway
+### Option 2: Netlify + Vercel
 
 #### Frontend (Netlify)
 1. **Deploy to Netlify**
@@ -76,230 +64,217 @@ This is the fastest way to get a live demo running.
    - Set **Publish directory** to `client/build`
    - Add environment variables:
      ```
-     REACT_APP_API_URL=https://your-backend-url.railway.app/api
+     REACT_APP_API_URL=https://your-backend-url.vercel.app/api
      REACT_APP_STRIPE_PUBLISHABLE_KEY=pk_test_your_stripe_key
      ```
    - Click "Deploy site"
 
-#### Backend (Railway)
-- Follow the same Railway setup as Option 1
+#### Backend (Vercel)
+- Follow the same Vercel setup as Option 1
 
-### Option 3: Full Vercel Deployment
+## 🎯 Demo URLs
 
-#### Frontend + Backend (Vercel)
-1. **Deploy Frontend**
-   - Follow Vercel frontend setup from Option 1
+After deployment, your demo will be available at:
+- **Frontend**: `https://your-app-name.vercel.app`
+- **Backend**: `https://your-backend-name.vercel.app`
+- **API Health**: `https://your-backend-name.vercel.app/api/health`
 
-2. **Deploy Backend**
-   - Create a new Vercel project
-   - Set **Root Directory** to `server`
-   - Add environment variables (same as Railway)
-   - Deploy
+## 🔧 Environment Variables Reference
 
-3. **Add Database**
-   - Use Vercel Postgres or external database
-   - Update environment variables accordingly
-
-## 🔧 Environment Variables for Demo
-
-### Frontend Environment Variables
+### Frontend (Vercel/Netlify)
 ```env
 REACT_APP_API_URL=https://your-backend-url.vercel.app/api
-REACT_APP_STRIPE_PUBLISHABLE_KEY=pk_test_51...your_stripe_key
+REACT_APP_STRIPE_PUBLISHABLE_KEY=pk_test_your_stripe_publishable_key
 ```
 
-### Backend Environment Variables
+### Backend (Vercel)
 ```env
 NODE_ENV=production
-DB_HOST=your-database-host
-DB_PORT=5432
-DB_NAME=ecommerce
-DB_USER=your-db-user
-DB_PASSWORD=your-db-password
+DATABASE_URL=postgresql://username:password@hostname/database?sslmode=require
 JWT_SECRET=your-super-secret-jwt-key-for-production
-STRIPE_SECRET_KEY=sk_test_51...your_stripe_secret_key
-STRIPE_PUBLISHABLE_KEY=pk_test_51...your_stripe_publishable_key
-PORT=5000
+STRIPE_SECRET_KEY=sk_test_your_stripe_secret_key
+STRIPE_PUBLISHABLE_KEY=pk_test_your_stripe_publishable_key
+CLIENT_URL=https://your-frontend-url.vercel.app
 ```
 
-## 🎯 Demo Features to Test
+## 🗄️ Database Setup
 
-Once deployed, test these features:
+### Using Neon (Recommended)
+1. **Create Neon Project**
+   - Go to [neon.tech](https://neon.tech)
+   - Sign up with GitHub
+   - Create a new project
+   - Copy the connection string
 
-### User Features
-- [ ] User registration
-- [ ] User login
-- [ ] Product browsing
-- [ ] Search and filtering
-- [ ] Add to cart
-- [ ] Checkout process
-- [ ] Payment with Stripe test cards
-- [ ] Order confirmation
+2. **Set up Schema**
+   - Use Neon's SQL editor
+   - Run the SQL from `server/scripts/setup-db.js`
+   - Or connect with a PostgreSQL client
 
-### Admin Features
-- [ ] Admin login
-- [ ] Product management
-- [ ] Order management
-- [ ] User management
+### Using Other Databases
+- **Supabase**: Similar to Neon, serverless PostgreSQL
+- **AWS RDS**: More complex but scalable
+- **Heroku Postgres**: Simple but more expensive
 
-### Test Data
-The database setup script includes sample data:
-- Sample products
-- Sample categories
-- Test user accounts
+## 🚀 Deployment Steps Summary
 
-## 🧪 Stripe Test Mode
+### Quick Deploy (5 minutes)
+1. **Database**: Create Neon project → Copy connection string
+2. **Backend**: Deploy to Vercel → Add environment variables
+3. **Frontend**: Deploy to Vercel → Add environment variables
+4. **Connect**: Update frontend URL in backend environment variables
+5. **Test**: Visit your demo URLs
 
-For the demo, use Stripe test mode:
+### Detailed Steps
+1. **Push to GitHub** (if not already done)
+2. **Deploy Backend**:
+   - Vercel → New Project → Import repo
+   - Root Directory: `server`
+   - Environment Variables: See reference above
+3. **Deploy Frontend**:
+   - Vercel → New Project → Import repo
+   - Root Directory: `client`
+   - Environment Variables: See reference above
+4. **Set up Database**:
+   - Neon → New Project → Copy connection string
+   - Run SQL schema in Neon SQL editor
+5. **Connect Services**:
+   - Update `CLIENT_URL` in backend environment variables
+   - Update `REACT_APP_API_URL` in frontend environment variables
+6. **Test Everything**:
+   - Check health endpoints
+   - Test user registration
+   - Test product browsing
+   - Test cart functionality
+   - Test payment (use test cards)
 
-### Test Card Numbers
-```
-Success: 4242 4242 4242 4242
-Decline: 4000 0000 0000 0002
-Requires 3D Secure: 4000 0025 0000 3155
-```
+## 🔍 Testing Your Demo
 
-### Test Details
-- Use any future expiry date
-- Use any 3-digit CVC
-- Use any billing address
+### Health Checks
+- **Backend Health**: `https://your-backend-name.vercel.app/health`
+- **API Health**: `https://your-backend-name.vercel.app/api/health`
 
-## 📱 Demo URLs
+### Feature Testing
+1. **User Registration/Login**
+2. **Product Browsing**
+3. **Add to Cart**
+4. **Checkout Process**
+5. **Payment (Test Mode)**
 
-After deployment, you'll have:
-- **Frontend**: `https://your-app-name.vercel.app`
-- **Backend**: `https://your-backend-name.railway.app`
-- **API Health**: `https://your-backend-name.railway.app/api/health`
+### Test Cards (Stripe Test Mode)
+- **Success**: `4242 4242 4242 4242`
+- **Decline**: `4000 0000 0000 0002`
+- **Requires Authentication**: `4000 0025 0000 3155`
 
-## 🔄 Updating the Demo
-
-### Automatic Updates
-- Both Vercel and Railway auto-deploy on Git push
-- Update code → Push to GitHub → Auto-deploy
-
-### Manual Updates
-- Vercel: Go to dashboard → Redeploy
-- Railway: Go to dashboard → Redeploy
-
-## 🛠️ Troubleshooting Demo Issues
+## 🛠️ Troubleshooting
 
 ### Common Issues
-
 1. **CORS Errors**
-   - Update CORS settings in backend
-   - Ensure frontend URL is in allowed origins
+   - Check `CLIENT_URL` in backend environment variables
+   - Ensure frontend URL matches exactly
 
-2. **Database Connection**
-   - Check database credentials
-   - Verify database is running
-   - Run database setup script
+2. **Database Connection Issues**
+   - Verify `DATABASE_URL` is correct
+   - Check Neon project is active
+   - Ensure SSL is enabled
 
-3. **Environment Variables**
-   - Double-check all environment variables
-   - Ensure no typos in variable names
-   - Restart services after changes
+3. **Environment Variable Issues**
+   - Check all required variables are set
+   - Verify no typos in variable names
+   - Redeploy after making changes
 
-4. **Stripe Issues**
-   - Verify API keys are correct
-   - Ensure using test mode keys
-   - Check webhook configuration
+4. **Build Failures**
+   - Check Vercel build logs
+   - Verify all dependencies are in package.json
+   - Check for syntax errors
 
 ### Debug Steps
-1. Check deployment logs
-2. Verify environment variables
-3. Test API endpoints directly
-4. Check browser console for errors
+1. **Check Vercel Logs**
+   - Go to your project dashboard
+   - Click on "Functions" tab
+   - View function logs for errors
 
-## 🎉 Demo Success Checklist
+2. **Test Locally First**
+   ```bash
+   # Backend
+   cd server
+   npm install
+   npm start
+   
+   # Frontend
+   cd client
+   npm install
+   npm start
+   ```
 
-- [ ] Frontend loads without errors
-- [ ] Backend API responds to health check
-- [ ] User can register and login
-- [ ] Products display correctly
-- [ ] Cart functionality works
-- [ ] Payment processing works
-- [ ] Admin features accessible
-- [ ] Mobile responsive design works
+3. **Verify Environment Variables**
+   - Check all required variables are set
+   - Test database connection
+   - Verify Stripe keys are correct
 
-## 📊 Demo Analytics
+## 📊 Monitoring Your Demo
 
 ### Vercel Analytics
-- Enable Vercel Analytics for frontend metrics
-- Monitor page views and performance
+- **Performance**: Page load times, Core Web Vitals
+- **Usage**: Page views, unique visitors
+- **Functions**: API response times, error rates
 
-### Railway Metrics
-- Monitor backend performance
-- Check database usage
-- Monitor API response times
+### Neon Monitoring
+- **Database Usage**: Query performance, connection count
+- **Storage**: Database size, backup status
+- **Performance**: Query execution times
 
-## 🔐 Security for Demo
+## 🎉 Demo Tips
 
-### Demo-Specific Security
-- Use test Stripe keys only
-- Use strong JWT secrets
-- Enable HTTPS (automatic on Vercel/Railway)
-- Set up proper CORS policies
+### For Presentations
+1. **Prepare Test Data**: Add some sample products
+2. **Use Test Mode**: All payments in test mode
+3. **Have Backup Plans**: Multiple demo URLs ready
+4. **Test Everything**: Run through full user flow beforehand
 
-### Production Considerations
-- Use production Stripe keys
-- Implement rate limiting
-- Add monitoring and logging
-- Set up proper backup strategies
+### For Development
+1. **Use Branches**: Keep demo separate from development
+2. **Monitor Costs**: Keep an eye on usage limits
+3. **Regular Updates**: Keep dependencies updated
+4. **Backup Data**: Export important data regularly
 
-## 🚀 Going Live
+## 🔄 Updates and Maintenance
 
-When ready for production:
+### Automatic Deployments
+- Both Vercel and Neon auto-deploy on Git push
+- No manual intervention needed for code updates
 
-1. **Update Stripe Keys**
-   - Switch to live Stripe keys
-   - Update webhook endpoints
-   - Test with real payment methods
+### Manual Updates
+- **Vercel**: Go to dashboard → Redeploy
+- **Neon**: Changes are instant for database
 
-2. **Database Migration**
-   - Set up production database
-   - Migrate data if needed
-   - Set up backups
+### Scaling Considerations
+- **Vercel**: Automatic scaling, pay per usage
+- **Neon**: Serverless scaling, pay per compute time
+- **Stripe**: Pay per transaction
 
-3. **Domain Setup**
-   - Configure custom domain
-   - Set up SSL certificates
-   - Update DNS settings
+## 💡 Pro Tips
 
-4. **Monitoring**
-   - Set up error tracking
-   - Monitor performance
-   - Set up alerts
+1. **Use Environment Variables**: Never hardcode sensitive data
+2. **Test Locally First**: Always test before deploying
+3. **Monitor Performance**: Keep an eye on response times
+4. **Have Backup Plans**: Multiple deployment options ready
+5. **Document Everything**: Keep track of URLs and credentials
+
+## 🆘 Getting Help
+
+### Documentation
+- **Vercel**: [vercel.com/docs](https://vercel.com/docs)
+- **Neon**: [neon.tech/docs](https://neon.tech/docs)
+- **Stripe**: [stripe.com/docs](https://stripe.com/docs)
+
+### Support
+- **Vercel**: Community Discord, GitHub Discussions
+- **Neon**: Community Discord, GitHub Issues
+- **Stripe**: Support tickets, documentation
 
 ---
 
-## Quick Start Commands
+**Your live demo should be ready in minutes! 🎉**
 
-```bash
-# 1. Push to GitHub
-git add .
-git commit -m "feat: add live demo configuration"
-git push origin main
-
-# 2. Deploy to Vercel (Frontend)
-# - Go to vercel.com
-# - Import repository
-# - Set root directory to 'client'
-# - Add environment variables
-# - Deploy
-
-# 3. Deploy to Railway (Backend)
-# - Go to railway.app
-# - Import repository
-# - Set root directory to 'server'
-# - Add PostgreSQL database
-# - Add environment variables
-# - Deploy
-
-# 4. Set up database
-cd server
-npm run db:setup
-
-# 5. Test your demo!
-```
-
-**Your live demo will be ready in minutes! 🎉**
+For the most up-to-date deployment guide, see [VERCEL_NEON_DEPLOYMENT.md](./VERCEL_NEON_DEPLOYMENT.md).
