@@ -1,6 +1,9 @@
 const { Pool } = require('pg');
 
+// For Neon, we can use either individual env vars or a connection string
 const pool = new Pool({
+  connectionString: process.env.DATABASE_URL || process.env.NEON_DATABASE_URL,
+  // Fallback to individual variables if connection string is not available
   user: process.env.DB_USER || 'postgres',
   host: process.env.DB_HOST || 'localhost',
   database: process.env.DB_NAME || 'ecommerce',
@@ -9,6 +12,8 @@ const pool = new Pool({
   max: 20,
   idleTimeoutMillis: 30000,
   connectionTimeoutMillis: 2000,
+  // Neon-specific SSL configuration
+  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
 });
 
 // Test the connection
